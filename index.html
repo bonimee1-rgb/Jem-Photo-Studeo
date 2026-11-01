@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090d18">
+  <title>Jem Photo Studio Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#">
+        <span class="brand-icon"><i class="fa-solid fa-camera-retro"></i></span>
+        <span><strong>JEM</strong><small>PHOTO STUDIO PRO</small></span>
+      </a>
+      <div class="top-actions">
+        <button class="icon-btn" id="undo-btn" title="Undo"><i class="fa-solid fa-rotate-left"></i></button>
+        <button class="icon-btn" id="redo-btn" title="Redo"><i class="fa-solid fa-rotate-right"></i></button>
+        <button class="btn btn-outline" id="reset-btn"><i class="fa-solid fa-arrow-rotate-left"></i> Reset</button>
+        <button class="btn btn-primary" id="export-top"><i class="fa-solid fa-download"></i> Export</button>
+      </div>
+    </header>
+
+    <main class="editor-layout">
+      <section class="canvas-section">
+        <div class="canvas-toolbar">
+          <div>
+            <span class="eyebrow">WORKSPACE</span>
+            <h2>Your creative space</h2>
+          </div>
+          <div class="canvas-actions">
+            <button class="icon-btn" id="compare-btn" title="Hold to compare original"><i class="fa-solid fa-eye"></i></button>
+            <button class="icon-btn" id="fit-btn" title="Fit image"><i class="fa-solid fa-expand"></i></button>
+            <span class="status-pill"><i class="fa-solid fa-circle"></i> Ready</span>
+          </div>
+        </div>
+
+        <div class="workspace" id="workspace">
+          <div class="upload-card" id="upload-placeholder">
+            <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <h2>Bring your vision to life</h2>
+            <p>Drag and drop an image here, or browse your device.</p>
+            <button class="btn btn-primary" id="browse-btn"><i class="fa-solid fa-folder-open"></i> Choose Image</button>
+            <span class="upload-note">JPG, PNG, WEBP · Your image stays in your browser</span>
+          </div>
+
+          <div class="preview-wrap" id="image-container" hidden>
+            <div class="preview-stage" id="preview-stage">
+              <img id="preview-img" alt="Photo preview">
+              <div class="preview-watermark" id="preview-watermark"></div>
+            </div>
+          </div>
+          <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" hidden>
+        </div>
+
+        <div class="image-info">
+          <span id="image-name">No image selected</span>
+          <span id="image-dimensions">—</span>
+        </div>
+
+        <div class="quick-tools">
+          <button class="tool-button" id="rotate-left"><i class="fa-solid fa-rotate-left"></i><span>Rotate Left</span></button>
+          <button class="tool-button" id="rotate-right"><i class="fa-solid fa-rotate-right"></i><span>Rotate Right</span></button>
+          <button class="tool-button" id="flip-x"><i class="fa-solid fa-arrows-left-right"></i><span>Flip H</span></button>
+          <button class="tool-button" id="flip-y"><i class="fa-solid fa-arrows-up-down"></i><span>Flip V</span></button>
+          <button class="tool-button" id="change-image"><i class="fa-regular fa-image"></i><span>Change Image</span></button>
+        </div>
+      </section>
+
+      <aside class="editor-panel">
+        <div class="panel-heading">
+          <div><span class="eyebrow">EDITING TOOLS</span><h2>Studio Editor</h2></div>
+          <span class="pro-tag">PRO</span>
+        </div>
+
+        <nav class="tabs" aria-label="Editing tools">
+          <button class="tab active" data-tab="adjust"><i class="fa-solid fa-sliders"></i> Adjust</button>
+          <button class="tab" data-tab="filters"><i class="fa-solid fa-wand-magic-sparkles"></i> Filters</button>
+          <button class="tab" data-tab="crop"><i class="fa-solid fa-crop-simple"></i> Crop</button>
+          <button class="tab" data-tab="background"><i class="fa-regular fa-image"></i> BG</button>
+          <button class="tab" data-tab="text"><i class="fa-solid fa-font"></i> Text</button>
+          <button class="tab" data-tab="ai"><i class="fa-solid fa-brain"></i> AI</button>
+        </nav>
+
+        <div class="panel-content">
+          <section class="tab-content active" id="tab-adjust">
+            <div class="section-title"><h3>Light & Color</h3><button class="text-btn" id="reset-adjust">Reset</button></div>
+            <div class="control-list">
+              <label class="slider-control"><span>Brightness <output id="brightness-value">100%</output></span><input type="range" data-control="brightness" min="0" max="200" value="100"></label>
+              <label class="slider-control"><span>Contrast <output id="contrast-value">100%</output></span><input type="range" data-control="contrast" min="0" max="200" value="100"></label>
+              <label class="slider-control"><span>Saturation <output id="saturation-value">100%</output></span><input type="range" data-control="saturation" min="0" max="200" value="100"></label>
+              <label class="slider-control"><span>Exposure <output id="exposure-value">0</output></span><input type="range" data-control="exposure" min="-100" max="100" value="0"></label>
+              <label class="slider-control"><span>Temperature <output id="temperature-value">0</output></span><input type="range" data-control="temperature" min="-100" max="100" value="0"></label>
+              <label class="slider-control"><span>Hue <output id="hue-value">0°</output></span><input type="range" data-control="hue" min="-180" max="180" value="0"></label>
+              <label class="slider-control"><span>Blur <output id="blur-value">0px</output></span><input type="range" data-control="blur" min="0" max="10" value="0" step="0.5"></label>
+              <label class="slider-control"><span>Grayscale <output id="grayscale-value">0%</output></span><input type="range" data-control="grayscale" min="0" max="100" value="0"></label>
+              <label class="slider-control"><span>Sepia <output id="sepia-value">0%</output></span><input type="range" data-control="sepia" min="0" max="100" value="0"></label>
+              <label class="slider-control"><span>Vignette <output id="vignette-value">0%</output></span><input type="range" data-control="vignette" min="0" max="100" value="0"></label>
+            </div>
+          </section>
+
+          <section class="tab-content" id="tab-filters">
+            <div class="section-title"><h3>Creative Presets</h3></div>
+            <div class="preset-grid">
+              <button class="preset active" data-preset="original"><span class="preset-preview original"></span>Original</button>
+              <button class="preset" data-preset="bright"><span class="preset-preview bright"></span>Bright</button>
+              <button class="preset" data-preset="golden"><span class="preset-preview golden"></span>Golden</button>
+              <button class="preset" data-preset="vintage"><span class="preset-preview vintage"></span>Vintage</button>
+              <button class="preset" data-preset="mono"><span class="preset-preview mono"></span>Mono</button>
+              <button class="preset" data-preset="cool"><span class="preset-preview cool"></span>Cool</button>
+              <button class="preset" data-preset="dramatic"><span class="preset-preview dramatic"></span>Dramatic</button>
+              <button class="preset" data-preset="dream"></button>
+            </div>
+          </section>
+
+          <section class="tab-content" id="tab-crop">
+            <div class="section-title"><h3>Crop & Transform</h3></div>
+            <p class="help-text">Choose an output aspect ratio. Cropping is applied when exporting.</p>
+            <div class="ratio-grid">
+              <button class="ratio-btn active" data-ratio="free">Original</button>
+              <button class="ratio-btn" data-ratio="1">1:1 Square</button>
+              <button class="ratio-btn" data-ratio="1.7778">16:9</button>
+              <button class="ratio-btn" data-ratio="1.5">3:2</button>
+              <button class="ratio-btn" data-ratio="0.8">4:5</button>
+              <button class="ratio-btn" data-ratio="0.5625">9:16</button>
+            </div>
+            <div class="section-title sub-title"><h3>Border</h3></div>
+            <label class="slider-control"><span>Border Size <output id="border-value">0px</output></span><input type="range" id="border-size" min="0" max="80" value="0"></label>
+            <label class="field-label">Border Color<input type="color" id="border-color" value="#ffffff"></label>
+          </section>
+
+          <section class="tab-content" id="tab-background">
+            <div class="section-title"><h3>Canvas Background</h3></div>
+            <p class="help-text">Changes the canvas background behind your image.</p>
+            <div class="swatches">
+              <button class="swatch" style="background:#ffffff" data-bg="#ffffff" aria-label="White"></button>
+              <button class="swatch" style="background:#111827" data-bg="#111827" aria-label="Dark"></button>
+              <button class="swatch" style="background:#ef4444" data-bg="#ef4444" aria-label="Red"></button>
+              <button class="swatch" style="background:#22c55e" data-bg="#22c55e" aria-label="Green"></button>
+              <button class="swatch" style="background:#3b82f6" data-bg="#3b82f6" aria-label="Blue"></button>
+              <button class="swatch" style="background:linear-gradient(135deg,#ec4899,#f59e0b)" data-bg="gradient" aria-label="Gradient"></button>
+            </div>
+            <label class="field-label">Custom Background<input type="color" id="background-color" value="#111827"></label>
+          </section>
+
+          <section class="tab-content" id="tab-text">
+            <div class="section-title"><h3>Text & Watermark</h3><button class="text-btn" id="clear-text">Clear</button></div>
+            <label class="field-label">Your Text<input type="text" id="watermark-input" placeholder="Type your text..."></label>
+            <label class="field-label">Font Family
+              <select id="text-font"><option value="Arial">Arial</option><option value="Georgia">Georgia</option><option value="Impact">Impact</option><option value="serif">Serif</option><option value="sans-serif">Sans Serif</option></select>
+            </label>
+            <div class="two-fields">
+              <label class="field-label">Text Color<input type="color" id="text-color" value="#ffffff"></label>
+              <label class="field-label">Text Size<input type="number" id="text-size" min="8" max="300" value="48"></label>
+            </div>
+            <label class="slider-control"><span>Opacity <output id="text-opacity-value">100%</output></span><input type="range" id="text-opacity" min="10" max="100" value="100"></label>
+            <label class="field-label">Position
+              <select id="text-position"><option value="bottom">Bottom Center</option><option value="top">Top Center</option><option value="center">Center</option><option value="bottom-left">Bottom Left</option><option value="bottom-right">Bottom Right</option></select>
+            </label>
+          </section>
+
+          <section class="tab-content" id="tab-ai">
+            <div class="ai-card">
+              <div class="ai-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+              <h3>AI Creative Studio</h3>
+              <p>Connect a compatible image AI service to enable these tools.</p>
+            </div>
+            <button class="ai-tool" data-ai="background"><i class="fa-solid fa-scissors"></i><span><strong>AI Background Remover</strong><small>Remove image backgrounds</small></span><i class="fa-solid fa-lock"></i></button>
+            <button class="ai-tool" data-ai="object"><i class="fa-solid fa-eraser"></i><span><strong>AI Object Remover</strong><small>Remove unwanted objects</small></span><i class="fa-solid fa-lock"></i></button>
+            <button class="ai-tool" data-ai="enhance"><i class="fa-solid fa-wand-sparkles"></i><span><strong>AI Photo Enhancer</strong><small>Improve image quality</small></span><i class="fa-solid fa-lock"></i></button>
+            <button class="ai-tool" data-ai="upscale"><i class="fa-solid fa-up-right-and-down-left-from-center"></i><span><strong>AI Image Upscaler</strong><small>Increase image resolution</small></span><i class="fa-solid fa-lock"></i></button>
+          </section>
+        </div>
+
+        <div class="export-panel">
+          <div class="export-options">
+            <label>Format<select id="export-format"><option value="image/jpeg">JPG</option><option value="image/png">PNG</option></select></label>
+            <label>Quality<select id="export-quality"><option value="0.85">High</option><option value="0.95" selected>Very High</option><option value="1">Maximum</option></select></label>
+          </div>
+          <button class="btn btn-primary export-button" id="download-btn"><i class="fa-solid fa-download"></i> Export Photo</button>
+          <p class="privacy-note"><i class="fa-solid fa-shield-halved"></i> Private editing · Processed locally</p>
+        </div>
+      </aside>
+    </main>
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <canvas id="export-canvas" hidden></canvas>
+  <script src="script.js"></script>
+</body>
+</html>
