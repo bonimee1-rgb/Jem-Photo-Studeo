@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111827">
+  <title>Jem Photo Studio Pro</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #0f172a;
+      color: #f8fafc;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 15px 18px;
+      background: #111827;
+      border-bottom: 1px solid #334155;
+    }
+    header h1 { font-size: 20px; margin: 0; }
+    main {
+      width: min(1200px, 100%);
+      margin: auto;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 16px;
+    }
+    .panel {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 15px;
+      margin-bottom: 14px;
+    }
+    .workspace {
+      min-height: 420px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background-color: #0b1220;
+      background-image:
+        linear-gradient(45deg,#263244 25%,transparent 25%),
+        linear-gradient(-45deg,#263244 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#263244 75%),
+        linear-gradient(-45deg,transparent 75%,#263244 75%);
+      background-size: 22px 22px;
+      background-position: 0 0,0 11px,11px -11px,-11px 0;
+      border-radius: 12px;
+      padding: 12px;
+    }
+    #preview-canvas {
+      display: block;
+      max-width: 100%;
+      max-height: 70vh;
+      width: auto;
+      height: auto;
+      touch-action: none;
+      cursor: crosshair;
+    }
+    button, select, input {
+      font: inherit;
+    }
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 10px 13px;
+      background: #334155;
+      color: white;
+      cursor: pointer;
+      margin: 3px;
+    }
+    button:hover { filter: brightness(1.2); }
+    button.primary { background: #7c3aed; }
+    button.danger { background: #be123c; }
+    button.active { outline: 2px solid #c4b5fd; }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    .row { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
+    .field { margin: 12px 0; }
+    label { display: block; margin-bottom: 6px; font-size: 13px; color: #cbd5e1; }
+    input[type="range"] { width: 100%; }
+    input[type="color"] { width: 48px; height: 36px; border: 0; background: transparent; }
+    input[type="file"] { width: 100%; }
+    select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      background: #0f172a;
+      color: white;
+      border: 1px solid #475569;
+    }
+    .hint { font-size: 12px; color: #94a3b8; line-height: 1.5; }
+    #status {
+      min-height: 22px;
+      font-size: 13px;
+      color: #c4b5fd;
+      margin-top: 8px;
+    }
+    .section-title { font-size: 15px; margin: 0 0 12px; }
+    .color-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .swatch {
+      width: 30px;
+      height: 30px;
+      border: 2px solid white;
+      border-radius: 50%;
+      padding: 0;
+    }
+    footer { text-align: center; padding: 20px; color: #64748b; font-size: 12px; }
+    @media (max-width: 800px) {
+      main { grid-template-columns: 1fr; padding: 10px; }
+      .workspace { min-height: 280px; }
+      #preview-canvas { max-height: 55vh; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>✦ Jem Photo Studio Pro</h1>
+    <div class="row">
+      <button id="undo-btn">↶ Undo</button>
+      <button id="redo-btn">↷ Redo</button>
+      <button id="download-btn" class="primary">Download Photo</button>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="panel">
+        <div class="row">
+          <button id="upload-photo-btn" class="primary">Upload Photo</button>
+          <button id="upload-bg-btn">Upload Background</button>
+          <button id="remove-bg-btn">Remove Background</button>
+        </div>
+        <input id="photo-input" type="file" accept="image/*" hidden>
+        <input id="bg-input" type="file" accept="image/*" hidden>
+        <p class="hint">Upload your main photo first. Then add another photo as its background or erase the background manually.</p>
+      </div>
+
+      <div class="panel workspace">
+        <canvas id="preview-canvas" width="900" height="600"></canvas>
+      </div>
+
+      <div class="panel">
+        <h3 class="section-title">Manual Eraser</h3>
+        <div class="row">
+          <button id="erase-btn" class="active">Eraser</button>
+          <button id="restore-btn">Restore</button>
+          <button id="stop-brush-btn">Stop Brush</button>
+        </div>
+        <div class="field">
+          <label for="brush-size">Brush Size: <span id="brush-size-value">35</span> px</label>
+          <input id="brush-size" type="range" min="5" max="150" value="35">
+        </div>
+        <p class="hint">Use your finger or mouse to erase the foreground photo and reveal the background underneath. Choose Restore to paint erased areas back.</p>
+      </div>
+
+      <div class="panel">
+        <h3 class="section-title">Background</h3>
+        <div class="field">
+          <label>Background Color</label>
+          <div class="color-list">
+            <button class="swatch" data-bg="#ffffff" style="background:#ffffff"></button>
+            <button class="swatch" data-bg="#000000" style="background:#000000"></button>
+            <button class="swatch" data-bg="#87ceeb" style="background:#87ceeb"></button>
+            <button class="swatch" data-bg="#f5d0a9" style="background:#f5d0a9"></button>
+            <button class="swatch" data-bg="#16a34a" style="background:#16a34a"></button>
+            <button class="swatch" data-bg="#7c3aed" style="background:#7c3aed"></button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="bg-color">Custom Color</label>
+          <input id="bg-color" type="color" value="#ffffff">
+        </div>
+        <div class="field">
+          <label for="bg-blur">Background Blur: <span id="blur-value">0</span></label>
+          <input id="bg-blur" type="range" min="0" max="25" value="0">
+        </div>
+        <div class="row">
+          <button id="clear-bg-btn">Clear Background Photo</button>
+          <button id="reset-mask-btn">Reset Eraser</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3 class="section-title">Photo Adjustments</h3>
+        <div class="field">
+          <label for="brightness">Brightness</label>
+          <input id="brightness" type="range" min="0" max="200" value="100">
+        </div>
+        <div class="field">
+          <label for="contrast">Contrast</label>
+          <input id="contrast" type="range" min="0" max="200" value="100">
+        </div>
+        <div class="field">
+          <label for="saturation">Saturation</label>
+          <input id="saturation" type="range" min="0" max="200" value="100">
+        </div>
+        <button id="reset-adjustments-btn">Reset Adjustments</button>
+      </div>
+    </section>
+
+    <aside>
+      <div class="panel">
+        <h3 class="section-title">AI Background Remover</h3>
+        <div class="field">
+          <label for="ai-mode">AI Mode</label>
+          <select id="ai-mode">
+            <option value="both">Both: Offline first, then Online</option>
+            <option value="offline">Offline AI</option>
+            <option value="online">Online AI</option>
+          </select>
+        </div>
+        <button id="ai-remove-btn" class="primary" style="width:100%">✨ Remove Background with AI</button>
+        <p class="hint">
+          Offline AI requires a locally installed model integration.
+          Online AI requires your own secure backend endpoint.
+        </p>
+        <div id="status" role="status" aria-live="polite">Upload a photo to get started.</div>
+      </div>
+
+      <div class="panel">
+        <h3 class="section-title">Export</h3>
+        <div class="field">
+          <label for="export-format">Image Format</label>
+          <select id="export-format">
+            <option value="image/png">PNG (Transparent background supported)</option>
+            <option value="image/jpeg">JPEG</option>
+            <option value="image/webp">WEBP</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="export-quality">Quality</label>
+          <input id="export-quality" type="range" min="50" max="100" value="92">
+        </div>
+        <button id="download-btn-2" class="primary" style="width:100%">Download Edited Photo</button>
+      </div>
+
+      <div class="panel">
+        <h3 class="section-title">How to use</h3>
+        <p class="hint">
+          1. Upload your main photo.<br>
+          2. Upload a new background or choose a color.<br>
+          3. Use AI if configured, or erase manually.<br>
+          4. Use Restore to bring back erased parts.<br>
+          5. Download your final image.
+        </p>
+      </div>
+    </aside>
+  </main>
+
+  <footer>Jem Photo Studio Pro · Create · Edit · Remember</footer>
+  <script src="script.js"></script>
+</body>
+</html>
