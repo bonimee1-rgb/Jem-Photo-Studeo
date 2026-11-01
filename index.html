@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jem Photo Studio - Photo Editor</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome Icons for UI -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="container">
+        <h2>Jem Photo Studio - ፎቶ ማስተካከያ</h2>
+        
+        <div class="editor-wrapper">
+            <!-- ፎቶ የሚታይበት ቦታ -->
+            <div class="preview-box">
+                <img id="preview-img" src="placeholder.png" alt="ፎቶ ይምረጡ">
+            </div>
+
+            <!-- ማስተካከያ አማራጮች (Controls) -->
+            <div class="controls">
+                <div class="options-panel">
+                    <p class="title">ማስተካከያዎች (Filters)</p>
+                    <div class="filter-btns">
+                        <button id="brightness" class="active">ብሩህነት (Brightness)</button>
+                        <button id="saturation"> ከለር (Saturation)</button>
+                        <button id="inversion"> መቀልበስ (Inversion)</button>
+                        <button id="grayscale"> ጥቁርና ነጭ (Grayscale)</button>
+                    </div>
+
+                    <div class="slider">
+                        <div class="filter-info">
+                            <text class="name">ብሩህነት</text>
+                            <text class="value">100%</text>
+                        </div>
+                        <input type="range" value="100" min="0" max="200" id="filter-slider">
+                    </div>
+                </div>
+
+                <!-- ፎቶን ማዞሪያ እና ማስተካከያ ቁልፎች -->
+                <div class="rotate-panel">
+                    <p class="title">ማዞሪያ እና ማንጸባረቂያ</p>
+                    <div class="icons">
+                        <button id="rotate-left"><i class="fa-solid fa-rotate-left"></i></button>
+                        <button id="rotate-right"><i class="fa-solid fa-rotate-right"></i></button>
+                        <button id="flip-x"><i class="fa-solid fa-arrows-alt-h"></i></button>
+                        <button id="flip-y"><i class="fa-solid fa-arrows-alt-v"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ፋይል መጫኛ እና ማውረጃ ቁልፎች -->
+        <div class="controls-row">
+            <input type="file" id="file-input" accept="image/*" hidden>
+            <button class="choose-img">ፎቶ ምረጥ</button>
+            <button class="reset-filter">ሁሉንም ሪሴት አድርግ</button>
+            <button class="save-img">ፎቶ አውርድ (Download)</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
