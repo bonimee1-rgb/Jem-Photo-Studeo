@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+body { 
+    font-family: 'Plus Jakarta Sans', sans-serif; 
+}
+
+.custom-scrollbar::-webkit-scrollbar { 
+    width: 4px; 
+    height: 4px; 
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb { 
+    background: #cbd5e1; 
+    border-radius: 4px; 
+}
+
+/* ፎቶው ከጀርባው (Background) ጋር የሚኖረው ዲዛይን */
+#image-container {
+    transition: background-color 0.3s ease, background 0.3s ease;
+}
+
+/* የተጫነው ምስል መቆጣጠሪያ */
+#preview-img {
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
