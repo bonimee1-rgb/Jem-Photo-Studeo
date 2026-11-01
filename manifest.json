@@ -1,0 +1,21 @@
+
+{
+  "id": "./",
+  "name": "Jem Photo Studio Pro",
+  "short_name": "Jem Studio",
+  "description": "Professional offline photo editor",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#080d1b",
+  "theme_color": "#080d1b",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
